@@ -1,0 +1,631 @@
+{
+  "name": "I2A2 - Exercicio - ni",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1040,
+        -180
+      ],
+      "id": "6777558c-d39a-4652-985a-2b209730dacc",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1jaNl2kL-a32HO_jXH3g3J1mGHzHWm9YD",
+          "mode": "list",
+          "cachedResultName": "202401_NFs.zip",
+          "cachedResultUrl": "https://drive.google.com/file/d/1jaNl2kL-a32HO_jXH3g3J1mGHzHWm9YD/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -820,
+        -180
+      ],
+      "id": "f6dd6a82-98a9-41ce-8a78-0f1723a9bf8d",
+      "name": "Google Drive",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "kAl9brhqSIpGhbQj",
+          "name": "Google Drive Nicole"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        40,
+        -60
+      ],
+      "id": "8d74f939-50cc-42e0-b593-7f1c0743c2c3",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    binary: { data: $items(\"Unzip\")[0].binary.file_0 },\n    json: { _origem_temp: 'cabecalho' }\n  },\n  {\n    binary: { data: $items(\"Unzip\")[0].binary.file_1 },\n    json: { _origem_temp: 'itens' }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -380,
+        -180
+      ],
+      "id": "3d7077a9-751c-49ca-a1f0-ec265015d115",
+      "name": "Code"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.compression",
+      "typeVersion": 1.1,
+      "position": [
+        -600,
+        -180
+      ],
+      "id": "6610e983-6adb-4849-9406-96ae9f595e37",
+      "name": "Unzip"
+    },
+    {
+      "parameters": {
+        "content": "Tratando arquivo zip\n",
+        "height": 360,
+        "width": 1580,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1120,
+        -260
+      ],
+      "id": "380422d4-815a-4d91-b894-9c764bac805f",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1040,
+        220
+      ],
+      "id": "d6600748-f86a-4efb-aa96-776fc859bd1f",
+      "name": "When chat message received",
+      "webhookId": "31ee64eb-1097-4e85-a12e-8ec07e5d25cd"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        40,
+        -260
+      ],
+      "id": "ee379477-c1bf-40ef-bee8-86d84abb5474",
+      "name": "Extract from File1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8141cc30-6117-4a68-9b20-30934d1f6096",
+              "leftValue": "={{ $json._origem_temp }}",
+              "rightValue": "cabecalho",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -220,
+        -180
+      ],
+      "id": "13ac8dc5-ed43-44a9-b6c7-19ab43d06ced",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "['CHAVE DE ACESSO']",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        280,
+        -140
+      ],
+      "id": "270e459c-b3ba-4c5b-9f54-46d88fb18c4f",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "content": "Agente",
+        "height": 820,
+        "width": 1580,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1120,
+        120
+      ],
+      "id": "e04daa24-f3e1-48e9-91fb-d696cdf21e43",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "tableId": "nota_fiscal",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "CHAVE_DE_ACESSO",
+              "fieldValue": "={{ $json['CHAVE DE ACESSO'] }}"
+            },
+            {
+              "fieldId": "MODELO",
+              "fieldValue": "={{ $json.MODELO }}"
+            },
+            {
+              "fieldId": "SERIE",
+              "fieldValue": "={{ $json['SÉRIE'] }}"
+            },
+            {
+              "fieldId": "NUMERO",
+              "fieldValue": "={{ $json['NÚMERO'] }}"
+            },
+            {
+              "fieldId": "NATUREZA_DA_OPERACAO",
+              "fieldValue": "={{ $json['NATUREZA DA OPERAÇÃO'] }}"
+            },
+            {
+              "fieldId": "DATA_EMISSAO",
+              "fieldValue": "={{ $json['DATA EMISSÃO'] }}"
+            },
+            {
+              "fieldId": "EVENTO_MAIS_RECENTE",
+              "fieldValue": "={{ $json['EVENTO MAIS RECENTE'] }}"
+            },
+            {
+              "fieldId": "DATA_HORA_EVENTO_MAIS_RECENTE",
+              "fieldValue": "={{ $json['DATA/HORA EVENTO MAIS RECENTE'] }}"
+            },
+            {
+              "fieldId": "CPF_CNPJ_Emitente",
+              "fieldValue": "={{ $json['CPF/CNPJ Emitente'] }}"
+            },
+            {
+              "fieldId": "RAZAO_SOCIAL_EMITENTE",
+              "fieldValue": "={{ $json['RAZÃO SOCIAL EMITENTE'] }}"
+            },
+            {
+              "fieldId": "INSCRICAO_ESTADUAL_EMITENTE",
+              "fieldValue": "={{ $json['INSCRIÇÃO ESTADUAL EMITENTE'] }}"
+            },
+            {
+              "fieldId": "UF_EMITENTE",
+              "fieldValue": "={{ $json['UF EMITENTE'] }}"
+            },
+            {
+              "fieldId": "MUNICIPIO_EMITENTE",
+              "fieldValue": "={{ $json['MUNICÍPIO EMITENTE'] }}"
+            },
+            {
+              "fieldId": "CNPJ_DESTINATARIO",
+              "fieldValue": "={{ $json['CNPJ DESTINATÁRIO'] }}"
+            },
+            {
+              "fieldId": "NOME_DESTINATARIO",
+              "fieldValue": "={{ $json['NOME DESTINATÁRIO'] }}"
+            },
+            {
+              "fieldId": "UF_DESTINATARIO",
+              "fieldValue": "={{ $json['UF DESTINATÁRIO'] }}"
+            },
+            {
+              "fieldId": "INDICADOR_IE_DESTINATARIO",
+              "fieldValue": "={{ $json['INDICADOR IE DESTINATÁRIO'] }}"
+            },
+            {
+              "fieldId": "DESTINO_DA_OPERACAO",
+              "fieldValue": "={{ $json['DESTINO DA OPERAÇÃO'] }}"
+            },
+            {
+              "fieldId": "CONSUMIDOR_FINAL",
+              "fieldValue": "={{ $json['CONSUMIDOR FINAL'] }}"
+            },
+            {
+              "fieldId": "PRESENCA_DO_COMPRADOR",
+              "fieldValue": "={{ $json['PRESENÇA DO COMPRADOR'] }}"
+            },
+            {
+              "fieldId": "VALOR_NOTA_FISCAL",
+              "fieldValue": "={{ $json['VALOR NOTA FISCAL'] }}"
+            },
+            {
+              "fieldId": "NUMERO_PRODUTO",
+              "fieldValue": "={{ $json['NÚMERO PRODUTO'] }}"
+            },
+            {
+              "fieldId": "DESCRICAO_DO_PRODUTO_SERVICO",
+              "fieldValue": "={{ $json['DESCRIÇÃO DO PRODUTO/SERVIÇO'] }}"
+            },
+            {
+              "fieldId": "CODIGO_NCM_SH",
+              "fieldValue": "={{ $json['CÓDIGO NCM/SH'] }}"
+            },
+            {
+              "fieldId": "CFOP",
+              "fieldValue": "={{ $json.CFOP }}"
+            },
+            {
+              "fieldId": "QUANTIDADE",
+              "fieldValue": "={{ $json.QUANTIDADE }}"
+            },
+            {
+              "fieldId": "UNIDADE",
+              "fieldValue": "={{ $json.UNIDADE }}"
+            },
+            {
+              "fieldId": "VALOR_UNITARIO",
+              "fieldValue": "={{ $json['VALOR UNITÁRIO'] }}"
+            },
+            {
+              "fieldId": "VALOR_TOTAL",
+              "fieldValue": "={{ $json['VALOR TOTAL'] }}"
+            },
+            {
+              "fieldId": "NCM_SH_TIPO_DE_PRODUTO",
+              "fieldValue": "={{ $json['NCM/SH (TIPO DE PRODUTO)'] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        780,
+        -120
+      ],
+      "id": "ece70d34-937a-4771-85d2-d6a8a00bef51",
+      "name": "Supabase",
+      "executeOnce": false,
+      "credentials": {
+        "supabaseApi": {
+          "id": "rW9YKMFpYpsb0VVS",
+          "name": "Supabase account - Jarvisjr"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        500,
+        -140
+      ],
+      "id": "cc83a7d2-12d8-45d2-8095-9e427f236fd3",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -860,
+        420
+      ],
+      "id": "068dcb9a-51a9-48a9-992c-c1094f704d8a",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "xoxEkCT0ixiZIbih",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "{{ $json.text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -460,
+        220
+      ],
+      "id": "e4ad0c69-a5c8-4aa8-b56d-f514d1d6e8d1",
+      "name": "Postgres",
+      "credentials": {
+        "postgres": {
+          "id": "28XyFddqSLtXavO6",
+          "name": "Postgres account \\ supabase \\ RAG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an SQL assistant for Supabase.\n\nYour task is to convert questions written in Portuguese into valid and efficient SQL queries for a single table named \"nota_fiscal\".\n\nThis table contains the following columns:\n\nCHAVE_DE_ACESSO, MODELO, SERIE, NUMERO, NATUREZA_DA_OPERACAO, DATA_EMISSAO, EVENTO_MAIS_RECENTE, DATA_HORA_EVENTO_MAIS_RECENTE, CPF_CNPJ_Emitente, RAZAO_SOCIAL_EMITENTE, INSCRICAO_ESTADUAL_EMITENTE, UF_EMITENTE, MUNICIPIO_EMITENTE, CNPJ_DESTINATARIO, NOME_DESTINATARIO, UF_DESTINATARIO, INDICADOR_IE_DESTINATARIO, DESTINO_DA_OPERACAO, CONSUMIDOR_FINAL, PRESENCA_DO_COMPRADOR, VALOR_NOTA_FISCAL, NUMERO_PRODUTO, DESCRICAO_DO_PRODUTO_SERVICO, CODIGO_NCM_SH, NCM_SH_TIPO_DE_PRODUTO, CFOP, QUANTIDADE, UNIDADE, VALOR_UNITARIO, VALOR_TOTAL\n\nSemantic mappings:\n\nnota fiscal / invoice / NF-e → refers to unique invoices identified by CHAVE_DE_ACESSO.\n\nvalor da nota / valor total da nota fiscal → refers to VALOR_NOTA_FISCAL.\n\nproduto → refers to DESCRICAO_DO_PRODUTO_SERVICO.\n\nSuper unique value is CPF_CNPJ_Emitente + RAZAO_SOCIAL_EMITENTE + CHAVE_DE_ACESSO + VALOR_NOTA_FISCAL.\n\n\n📘 Important logic:\n\nWhen counting invoices (\"notas fiscais\"), always use COUNT(DISTINCT \"CHAVE_DE_ACESSO\").\n\nEvery SQL statement should start with SELECT — never WITH.\n\nOnly return one single SQL query per answer.\n\n⚠️ Strict instructions:\n\nEnclose field names in \"\", for example \"CHAVE_DE_ACESSO\", \"VALOR_NOTA_FISCAL\"\n\nAll the data is in a single table. Do not use JOINS, only use the columns listed above. Do not invent or assume columns.\n\nOnly include SQL commands (e.g., SELECT).\n\nDo not use Markdown formatting (e.g., triple backticks).\n\nAnswer with only the SQL query. Clean and ready to execute. No explanations.\n\nUse question (in Porttuguese):\n{{ $json.chatInput }}\n",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -820,
+        220
+      ],
+      "id": "631f06a2-cd68-45e6-85e0-ddd65e58f871",
+      "name": "Cria SQL"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Você é um assistente especializado em comunicação clara e natural com usuários de sistemas de análise de dados.\n\nSua tarefa é gerar uma resposta textual, objetiva e amigável com base em:\n\n1. A pergunta feita pelo usuário.\n\n\n2. O resultado exato da consulta, que pode conter números, nomes ou ambos.\n\nPergunta do usuário: {{ $('When chat message received').item.json.chatInput }}\n\nResultado da consulta (formato JSON): {{ JSON.stringify($json) }}\n\n---\n\n📜 Regras obrigatórias para gerar a resposta:\n\nResponda diretamente à pergunta com base somente nos dados fornecidos.\n\nNão invente informações ou faça suposições.\n\nSe o resultado tiver múltiplos campos (ex.: nome da empresa e valor), inclua todos corretamente na resposta.\n\nFormate corretamente os números.\n\nPara valores monetários, use \"R$\" com duas casas decimais e separador de milhar.\nEx.: R$ 18.542,61\n\nPara contagens literais, use separador de milhar.\nEx.: \"Foram emitidas 1.258 notas fiscais\"\n\nSe o valor for zero, diga isso claramente.\nEx.: \"Não há nenhuma nota fiscal emitida.\"\n\nPergunta: \"Qual o valor total das notas emitidas?\"\nResultado: '153200.75'\nResposta: O valor total das notas emitidas foi de R$ 153.200,75.\n\nPergunta: \"Quantas notas foram emitidas?\"\nResultado: '0'\nResposta: Nenhuma nota fiscal foi emitida no período analisado.\n\nPergunta: \"Qual o número da nota com maior valor?\"\nResultado: '982145'\nResposta: A nota fiscal com o maior valor tem o número 982145.\n\n\n---\n\n✅ Sua resposta final deve ser apenas o texto, com clareza, precisão e formatação correta.\nNão use prefixos, markdown ou explicações adicionais.",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -240,
+        220
+      ],
+      "id": "05a3f342-ec25-4d39-be12-f4e8c31f6569",
+      "name": "Resposta Chat"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -260,
+        440
+      ],
+      "id": "ce14e33e-15e2-4d1a-87c1-b82d7f28dfbf",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "xoxEkCT0ixiZIbih",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Unzip",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Unzip": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Cria SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Extract from File1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Cria SQL",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres": {
+      "main": [
+        [
+          {
+            "node": "Resposta Chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cria SQL": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Resposta Chat",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f078e873-c5f5-4d64-97ee-5c23be53e3d1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "834195ebfc035840fee5ef3ecb2ac4447a897fc986c27c0392a088a144801d03"
+  },
+  "id": "336tHColyZvqAuqB",
+  "tags": []
+}
